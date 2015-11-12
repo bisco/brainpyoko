@@ -16,7 +16,7 @@ def brainpyoko(f):
         elif insts[iptr] == "<":
             dptr -= 1
             if dptr < 0:
-                debug_print("data pointer underflow", iptr, insts, dptr, data)
+                print("data pointer underflow", iptr, insts, dptr, data)
         elif insts[iptr] == "+":
             data[dptr] += 1
         elif insts[iptr] == "-":
