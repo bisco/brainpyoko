@@ -1,4 +1,4 @@
-#fineencoding: utf-8
+#fileencoding: utf-8
 
 from __future__ import print_function
 import sys
