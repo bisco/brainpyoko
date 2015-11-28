@@ -118,7 +118,7 @@ class pyokolang():
         self.executor()
 
 def usage():
-    print("usage: python pyokolang.py <filename>")
+    print("usage: pyoko <filename>")
     sys.exit()
 
 def main():
