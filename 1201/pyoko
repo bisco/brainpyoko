@@ -5,7 +5,7 @@ from __future__ import print_function
 import sys
 import codecs
 
-class brainpyoko():
+class pyokolang():
     plus   = "+"
     minus  = "-"
     gt     = ">"
@@ -14,7 +14,6 @@ class brainpyoko():
     rb     = "]"
     comma  = ","
     period = "."
-    #symbol_set = set([plus,minus,gt,lt,lb,rb,comma,period])
 
     def __init__(self,filename):
         with codecs.open(filename, "r", "utf-8") as f:
@@ -41,21 +40,21 @@ class brainpyoko():
         quasi_period = u"ﾋﾟｮｯｺﾘﾝ"
 
         if is_same(self.raw_code, pos, quasi_minus):
-            return quasi_minus, brainpyoko.minus
+            return quasi_minus, pyokolang.minus
         elif is_same(self.raw_code, pos, quasi_period):
-            return quasi_period, brainpyoko.period
+            return quasi_period, pyokolang.period
         elif is_same(self.raw_code, pos, quasi_gt):
-            return quasi_gt, brainpyoko.gt
+            return quasi_gt, pyokolang.gt
         elif is_same(self.raw_code, pos, quasi_lt):
-            return quasi_lt, brainpyoko.lt
+            return quasi_lt, pyokolang.lt
         elif is_same(self.raw_code, pos, quasi_lb):
-            return quasi_lb, brainpyoko.lb
+            return quasi_lb, pyokolang.lb
         elif is_same(self.raw_code, pos, quasi_rb):
-            return quasi_rb, brainpyoko.rb
+            return quasi_rb, pyokolang.rb
         elif is_same(self.raw_code, pos, quasi_plus):
-            return quasi_plus, brainpyoko.plus
+            return quasi_plus, pyokolang.plus
         elif self.raw_code[pos:pos+len(quasi_comma)] == quasi_comma:
-            return quasi_comma, brainpyoko.comma
+            return quasi_comma, pyokolang.comma
         else:
             return False, False
 
@@ -64,21 +63,17 @@ class brainpyoko():
         while pos < len(self.raw_code):
             token, symbol = self.__get_token(pos)
             if token is False:
-                #print(pos,end="")
-                #print(":",end="")
-                #print(self.raw_code[pos])
                 pos += 1
                 continue
             self.insts.append(symbol)
             pos += len(token)
-        #print("".join(self.insts))
 
     def __gen_loopmap(self):
         stack = []
         for i, val in enumerate(self.insts):
-            if val == brainpyoko.lb:
+            if val == pyokolang.lb:
                 stack.append(i)
-            elif val == brainpyoko.rb:
+            elif val == pyokolang.rb:
                 if len(stack) == 0:
                     print("parse error: right brackets exists more than left brackets")
                     sys.exit()
@@ -94,27 +89,27 @@ class brainpyoko():
     def executor(self):
         self.__gen_loopmap()
         while self.iptr < len(self.insts):
-            if self.insts[self.iptr] == brainpyoko.gt: # >
+            if self.insts[self.iptr] == pyokolang.gt: # >
                 self.dptr += 1
                 if self.dptr >= len(self.data):
                     for i in range(len(self.data)):
                         self.data.append(0)
-            elif self.insts[self.iptr] == brainpyoko.lt: # <
+            elif self.insts[self.iptr] == pyokolang.lt: # <
                 self.dptr -= 1
                 if self.dptr < 0:
                     print("data pointer underflow", self.iptr, self.insts, self.dptr, self.data)
-            elif self.insts[self.iptr] == brainpyoko.plus: # +
+            elif self.insts[self.iptr] == pyokolang.plus: # +
                 self.data[self.dptr] += 1
-            elif self.insts[self.iptr] == brainpyoko.minus: # -
+            elif self.insts[self.iptr] == pyokolang.minus: # -
                 self.data[self.dptr] -= 1
-            elif self.insts[self.iptr] == brainpyoko.period: # .
+            elif self.insts[self.iptr] == pyokolang.period: # .
                 print(chr(self.data[self.dptr]), end="")
-            elif self.insts[self.iptr] == brainpyoko.comma:  # ,
+            elif self.insts[self.iptr] == pyokolang.comma:  # ,
                 self.data[self.dptr] = sys.stdin.read(1)
-            elif self.insts[self.iptr] == brainpyoko.lb: # [
+            elif self.insts[self.iptr] == pyokolang.lb: # [
                 if self.data[self.dptr] == 0:
                     self.iptr = self.loopmap[self.iptr]
-            elif self.insts[self.iptr] == brainpyoko.rb: # ]
+            elif self.insts[self.iptr] == pyokolang.rb: # ]
                 if self.data[self.dptr] != 0:
                     self.iptr = self.loopmap[self.iptr]
             self.iptr += 1
@@ -123,13 +118,13 @@ class brainpyoko():
         self.executor()
 
 def usage():
-    print("usage: python brainpyoko.py <filename>")
+    print("usage: python pyokolang.py <filename>")
     sys.exit()
 
 def main():
     if len(sys.argv) != 2:
         usage()
-    bp = brainpyoko(sys.argv[1])
+    bp = pyokolang(sys.argv[1])
     bp.run()
     print()
 
